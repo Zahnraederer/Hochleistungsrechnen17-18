@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-// Nach Korrektur der Funktion call_by_reference löschen
-int TODO;
 
 void basic_pointer (int x)
 {

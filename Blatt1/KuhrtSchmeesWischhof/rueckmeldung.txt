@@ -4,6 +4,7 @@ Allgemeine Rückmeldung:
   Die Übungsstunde war gut strukturiert und aufschlussreich, es ist nichts
   negativ aufgefallen.
   Die Einleitungs-Vorlesung war als solche sehr gut und hat Interesse geweckt.
+  Das erste Übungsblatt war ein guter Einstieg in die Programmierung mit C.
   
 Wertungstabelle:
   Bearbeitungszeit: 10 min Aufgabe 1, 45 min Aufgabe 2,
@@ -11,7 +12,7 @@ Wertungstabelle:
   
   Schwierigkeit: "genau richtig"
   
-  Lehrreich: "etwas"
+  Lehrreich: "sehr"
   
   Verständlichkeit: "teilweise unklar"
   
