@@ -1,0 +1,30 @@
+Allgemeine Rückmeldung:
+  Die Bearbeitung war vom Kenntnisstand her kein Problem, es gab allerdings ein
+  paar Verständnisprobleme (siehe unten).
+  Die Übungsstunde war gut strukturiert und aufschlussreich, es ist nichts
+  negativ aufgefallen.
+  Die Einleitungs-Vorlesung war als solche sehr gut und hat Interesse geweckt.
+  
+Wertungstabelle:
+  Bearbeitungszeit: 10 min Aufgabe 1, 45 min Aufgabe 2,
+                    10 min Aufgabe 3, 10 min Aufgabe 4
+  
+  Schwierigkeit: "genau richtig"
+  
+  Lehrreich: "etwas"
+  
+  Verständlichkeit: "teilweise unklar"
+  
+  Komentar: Die Aufgaben waren größtenteils verständlich und klar, an einigen
+            Stellen gab es jedoch ein paar Unklarheiten: Bspw. war bei Aufgabe 2
+            nicht komplett klar, was mit "modifizieren, aber nicht erweitern"
+            gemeint ist. Bei Aufgabe 3 war nicht immer klar, was wie ersetzt
+            werden soll. In der main von pointer.c wird der Wert x auf 5 gesetzt
+            und in der Funktion call_by_reference (int* x) wird verlangt, dass 
+	    der Wert der an der Adresse steht, die in x gespeichert ist auf 200
+	    gesetzt wird. Wir sind also zunächst fälschlich davon ausgegangen das
+	    der Wert der an der Adresse 5 steht auf 200 gesetzt werden soll. 
+	    Später ist uns aufgefallen das call_by_reference (int* x) die Adresse
+	    von x (&x) übergeben wird. Man könnte den Parameter der Funktion 
+	    call_by_reference (int* x) in (int* z) änderen um Klarheit zu schaffen.
+            
