@@ -1,0 +1,65 @@
+Funktion: mistake1()
+Fehler:   Hier wird ein Pointer auf eine lokale Variable zurückgegeben. Das lässt
+          sich reparieren, indem man dynamisch Speicher alloziert und den Wert
+          bei Index 1 anschließend setzt.
+Diff:     12c12,18
+          <   int buf[] = { 1, 1, 2, 3, 4, 5 };
+          ---
+          >  int *buf = malloc (sizeof (int) * 6);
+          >  buf[0] =  1;
+          >  buf[1] =  1;
+          >  buf[2] =  2;
+          >  buf[3] =  3;
+          >  buf[4] =  4;
+          >  buf[5] =  5;
+
+Funktion: mistake2()
+Fehler:   In main() wird Index 1 verlangt es wird aber in Index 2 geschrieben.
+	  Zudem ist die größe des allozierten Speichers inkorrekt
+Diff:     19,25c25,26
+          <   int *buf = malloc (sizeof (char) * 4);
+          <   buf[2] = 2;
+          ---
+          >   int *buf = malloc (sizeof (int) * 2);
+          >   buf[1] = 2;
+
+Funktion: mistake3()
+Fehler:   Die variable mistake2_ war unbenutzt da buf auf die Adresse der Funktion
+	  mistake2 zeigt. Ausserdem war der Wert 0 nicht der verlangte in der main().
+	  um dafür zu sorgen, dass kein speicher direkt alloziert wird benutzen wir
+	  die funktion mistake2(), welche nach dem fix den speicher korrekt alloziert.
+Diff:     27,34c33,35
+          <   int mistake2_ = 0;
+          <   int *buf = (int *) &mistake2;
+          <   buf[0] = 3;
+          ---
+          >   int mistake2_ = 3;
+          >   int *buf = mistake2();
+          >   buf[0] = mistake2_;
+
+Funktion: mistake4()
+Fehler:   In main() wird direkt aus dem dereferenziertem Pointer gelesen, was
+          dem Array-Index 0 entspricht. Hier wird jedoch in Index 4 geschrieben.
+          Außerdem werden erneut nur 1 * 4 Byte alloziert, sodass außerhalb der
+          Grenzen geschrieben wird. Der Speicher wird auch freigegeben, bevor er
+          in main() benutzt werden kann. Da wir nur einen einzigen int schreiben
+          müssen, kann malloc so bleiben, da 4 Byte reichen und es sich hierbei
+          nicht wirklich um einen Fehler handelt, obwohl es unüblich ist.
+Diff:     37,41c41
+          <   buf[4] = 4;
+          <   free (buf);
+          ---
+          >   buf[0] = 4;
+
+Funktion: main
+Fehler:   p[1] zeigt auf &mistake2 ()[1], wir müssen free aber auf den 0. Index
+          bzw. die Adresse des eigentlichen Arrays ausführen. Also müssen wir 
+          hier einfach 1 abziehen. Für p[0], welches fehlte, ist es analog.
+          p[2] und p[3] fehlten auch, die zeigen aber auf den Anfang des Arrays.
+Diff:     55,58c59,62
+          <   free (p[1]);			/* welcher Pointer war das doch gleich?, TODO: Fixme... :-) */
+          ---
+          >   free((p[1])-1);
+          >   free(p[2]);
+          >   free(p[3]);
+          >   free((p[0])-1);

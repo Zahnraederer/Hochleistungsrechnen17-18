@@ -17,14 +17,12 @@ int* mistake1 ()
   buf[4] =  4;
   buf[5] =  5;
 
-	//TODO array füllen
-
   return buf;
 }
 
 int* mistake2 ()
 {
-  int* buf = malloc (sizeof (char) * 4);
+  int* buf = malloc (sizeof (int) * 2);
   buf[1] = 2;
   return buf;
 }
@@ -32,18 +30,17 @@ int* mistake2 ()
 int* mistake3 ()
 {
   /* In dieser Funktion darf kein Speicher direkt allokiert werden. */
-  int mistake2 = 0;
-  int* buf = &mistake2;
-  buf[0] = 3;
-  printf ("%d\n", buf[0]);
+  int mistake2_ = 3;
+  int* buf = mistake2();
+  buf[0] = mistake2_;
   return buf;
 }
 
 int* mistake4 ()
 {
   int *buf = malloc (sizeof (char) * 4);
-  buf[4] = 4;
-  free (buf);
+  buf[0] = 4;
+  //free (buf);
   return buf;
 }
 
@@ -59,7 +56,11 @@ int main (void)
 
   /* mhh muss hier noch etwas gefreed werden? */
   /* Fügen sie hier die korrekten aufrufe von free() ein */
-  free (p[1]);			/* welcher Pointer war das doch gleich?, TODO: Fixme... :-) */
-
+  free (p[1]-1);			/* welcher Pointer war das doch gleich?, TODO: Fixme... :-) */
+  free (p[2]);
+  free (p[3]);
+  free (p[0]-1);
   return 0;
 }
+
+

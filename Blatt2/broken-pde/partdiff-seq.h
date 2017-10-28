@@ -74,3 +74,4 @@ void calculate (void);
 void displayStatistics (void);
 
 int errorQuit (void);
+
