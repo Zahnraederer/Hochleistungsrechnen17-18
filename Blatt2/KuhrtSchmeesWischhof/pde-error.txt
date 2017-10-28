@@ -1,0 +1,54 @@
+Datei:    askparams.c
+Funktion: AskParams
+Fehler:   Es wird aus dem Array-Element mit Index 333 gelesen, das soll natürlich 3 sein.
+Diff:     196,200c196,200
+          <       sscanf (argV[2], "%d", method);
+          <       sscanf (argV[333], "%d", interlines);
+          <       sscanf (argV[4], "%d", func);
+          <       sscanf (argV[5], "%d", termination);
+          <       if (*termination == 1)
+          ---
+          >   sscanf (argV[2], "%d", method);
+          >   sscanf (argV[3], "%d", interlines);
+          >   sscanf (argV[4], "%d", func);
+          >   sscanf (argV[5], "%d", termination);
+          >   if (*termination == 1)
+
+
+Datei:    partdiff-seq.c
+Funktion: allocateMatrices()
+Fehler:   In initMatrices() (partdiff-seq.c:133) laufen i und j von 0 bis N.
+          Also muss auch eine Matrix der Größe 2*(N+1)^2 alloziert werden,
+          allerdings ist steht hier an einer Stelle (N - 1).
+Diff:     96c96
+          <   M = malloc (sizeof (double) * (N + 1) * (N - 1) * 2);	/* allocate memory */
+          ---
+          >   M = malloc (sizeof (double) * (N + 1) * (N + 1) * 2);	/* allocate memory */
+
+          
+Datei:    partdiff-seq.c
+Funktion: freeMatrices()
+Fehler:   Matrix wird freigegeben, bevor Matrix[0] und Matrix[1] freigegeben
+          wird, sodass diese beiden free-Aufrufe auf ungültigen Pointern
+          ausgeführt werden. Außerdem wird für M Speicher alloziert, der nie
+          freigegeben wird.
+Diff:     165,165d172
+          <   free (Matrix);
+          ---
+	  >  if(M != 0)
+	  >      free(M);
+	  >    if (Matrix[1] != 0)
+	  >      free (Matrix[1]);
+	  >    if (Matrix[0] != 0)
+	  >      free (Matrix[0]);
+	  >    if(Matrix != 0)
+	  >      free(Matrix);
+
+Datei:    partdiff-seq.c
+Funktion: calculate()
+Fehler:   Es wird auf Matrix[j - 1][m2] zugegriffen, obwohl bei allen Aufrufen
+          in der Umgebenung Matrix[m2][i+-??][j+-??] steht.
+Diff:     233c234
+          < 		- Matrix[j - 1][m2][i] + 4 * Matrix[m2][i][j] -
+          ---
+          > 		- Matrix[m2][i][j - 1] + 4 * Matrix[m2][i][j] -

@@ -1,0 +1,14 @@
+Die Bearbeitungszeit bitte in ganzen Stunden angeben (aufrunden).
+In den restlichen Zeilen jeweils ein X in der zutreffenden Spalte setzen.
+
+Bearbeitungszeit:  
+Schwierigkeit:     [ ] zu leicht         [X] genau richtig     [ ] zu schwer
+Lehrreich:         [ ] wenig             [ ] etwas             [X] sehr
+Verständlichkeit:  [ ] großteils unklar  [X] teilweise unklar  [ ] verständlich
+
+Kommentar:
+War zeitlich kein Problem. Nachdem man verstanden hat wie die Debugtools funktionieren
+waren es eher Fleiß- als Denkaufgaben. Die Übung war aber okay, ein paar mehr Infos
+zur Benutzung von gdb und valgrind wären nett gewesen auch wenn die auf der Website
+ausgereicht haben, kann man nach lesen von ein paar Tutorials die man schnell ergooglet
+deutlich mehr mit den Tools machen.
