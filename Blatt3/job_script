@@ -1,0 +1,9 @@
+#! /bin/bash
+
+#SBATCH --output=timescript.out
+#SBATCH -N 4
+#SBATCH -n 16
+#SBATCH -p west
+
+srun timescript
+echo 'fertig' > job_script.out
