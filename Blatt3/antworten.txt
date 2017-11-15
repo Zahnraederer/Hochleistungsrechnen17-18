@@ -40,6 +40,7 @@ Aufgabe1 :
 	Mit salloc -p west -N 1 kann man einen einzelnen Knoten allokieren.
 	Wie man spezifisch west7 allokiert haben wir nicht rausgefunden, man kann aber mit -x Knoten ausschliesen.
 	mit $ salloc -p west -N 1 -x "$(seq -f west%g -s " " 1 6) $(seq -f west%g -s " " 8 10)" kann man also west7 alokieren
+	srun -—partition=west -—nodelist=west7
 
 13. Wie hoch ist das Timeout auf dem Cluster, bis alle Knoten wieder freigegeben werden?
 	6 Stunden
