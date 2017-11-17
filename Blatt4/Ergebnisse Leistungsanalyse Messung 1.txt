@@ -1,0 +1,329 @@
+Leistungsanalyse Messung 1: partdiff-openmp-zeilen
+Messungen für 1-12 Threads
+
+---------Es gibt jeweils 3 Messwerte, damit wir Mittelwerte bilden können. 
+	 Ich habe sie in ein Ergebnis hintereinander geschrieben, da alle
+	 anderen Werte immer gleich geblieben sind-------------------------
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 12 2 512 2 2 1000
+siehe Ergebniss.txt
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 11 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    52.278114 s / 49.954333 s / 51.342657 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929057e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 10 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    54.426621 s / 54.028095 s / 54.012953 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 9 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    60.242885 s / 60.251186 s / 60.017726 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 8 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    67.396611 s / 67.371280 s / 67.467360 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 7 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    76.952212 s / 76.766124 s / 76.607088 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 6 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    89.114776 s / 88.962245 s / 89.378451 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 5 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    107.279975 s / 107.113236 s / 107.354975 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 4 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    133.436643 s / 135.165644 s / 133.508373 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 3 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    178.451232 s / 178.663891 s / 178.011402 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 2 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    264.543874 s / 264.663149 s / 264.581796 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
+wischhof@west2:~/Hochleistungsrechnen17-18/Blatt4$ ./partdiff-openmp-zeilen 1 2 512 2 2 1000
+============================================================
+Program for calculation of partial differential equations.
+============================================================
+(c) Dr. Thomas Ludwig, TU München.
+    Thomas A. Zochler, TU München.
+    Andreas C. Schmidt, TU München.
+============================================================
+
+Berechnungszeit:    526.248069 s / 526.356097 s / 525.946167 s
+Speicherbedarf:     257.126236 MiB
+Berechnungsmethode: Jacobi
+Interlines:         512
+Stoerfunktion:      f(x,y) = 2pi^2*sin(pi*x)sin(pi*y)
+Terminierung:       Anzahl der Iterationen
+Anzahl Iterationen: 1000
+Norm des Fehlers:   2.929058e-07
+
+Matrix:
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0002 0.0003 0.0003 0.0003 0.0002 0.0001 0.0000
+ 0.0000 0.0001 0.0001 0.0002 0.0002 0.0002 0.0001 0.0001 0.0000
+ 0.0000 0.0000 0.0001 0.0001 0.0001 0.0001 0.0001 0.0000 0.0000
+ 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000
+
