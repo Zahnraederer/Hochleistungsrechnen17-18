@@ -223,7 +223,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 		maxresiduum = 0;
 
-		#pragma omp parallel for private(star, residuum) num_threads(options->number) 
+		#pragma omp parallel for private(i,j,star, residuum) num_threads(options->number)
 		/* over all rows */
 		for (i = 1; i < N; i++)
 		{
