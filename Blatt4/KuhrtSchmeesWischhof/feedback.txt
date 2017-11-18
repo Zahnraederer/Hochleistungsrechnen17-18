@@ -1,9 +1,6 @@
-﻿Die Bearbeitungszeit bitte in ganzen Stunden angeben (aufrunden).
-In den restlichen Zeilen jeweils ein X in der zutreffenden Spalte setzen.
-
-Bearbeitungszeit:  
-Aufgabe 1: Xh,
-Aufgabe 2: Xh,
+﻿Bearbeitungszeit:  
+Aufgabe 1: 2h, Davon das meiste für den Zusatz mit den verschiedenen Aufteilungen.
+Aufgabe 2: 2h, Davon ca 1 Stunde das Jobscript ausbessern und 1 Stunde die Exeltabellen ausfüllen
 
 
 Bearbeitungszeit:  
@@ -13,3 +10,5 @@ Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [X] verständli
 
 Kommentar:
 Da wir jeweils 3 Messungen durchgeführt haben, hat die Leistungsanalyse sehr viel Zeit in Anspruch genommen, obwohl relativ schnell klar wurde, was uns die Aufgabe zeigen wollte.
+Glücklicherweise haben wir früh genug mit der Übung angefangen, deshalb ging alles gut, aber vielleicht wäre eine Warnung, dass man die Übung früh machen sollte gut da immer noch
+Messungsscripts auf dem Cluster laufen (3 Stunden vor Abgabe)
