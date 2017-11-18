@@ -1,13 +1,15 @@
-Die Bearbeitungszeit bitte in ganzen Stunden angeben (aufrunden).
+﻿Die Bearbeitungszeit bitte in ganzen Stunden angeben (aufrunden).
 In den restlichen Zeilen jeweils ein X in der zutreffenden Spalte setzen.
 
 Bearbeitungszeit:  
-Schwierigkeit:     [ ] zu leicht         [ ] genau richtig     [ ] zu schwer
-Lehrreich:         [ ] wenig             [ ] etwas             [ ] sehr
-Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [ ] verständlich
+Aufgabe 1: Xh,
+Aufgabe 2: Xh,
+
+
+Bearbeitungszeit:  
+Schwierigkeit:     [ ] zu leicht         [X] genau richtig     [ ] zu schwer
+Lehrreich:         [ ] wenig             [ ] etwas             [X] sehr
+Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [X] verständlich
 
 Kommentar:
-Zeitaufwand zu groß? Wo sind Sie nicht weiter gekommen?
-Was war zu schwer oder unverständlich?
-Was könnten wir verbessern?
-Was hat Ihnen besonders gut gefallen?
+Da wir 3 Messungen durchgeführt haben, hat die Leistungsanalyse sehr viel Zeit in Anspruch genommen, obwohl relativ schnell klar wurde, was uns die Aufgabe zeigen wollte.
