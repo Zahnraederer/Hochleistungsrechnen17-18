@@ -12,4 +12,4 @@ Lehrreich:         [ ] wenig             [ ] etwas             [X] sehr
 Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [X] verständlich
 
 Kommentar:
-Da wir 3 Messungen durchgeführt haben, hat die Leistungsanalyse sehr viel Zeit in Anspruch genommen, obwohl relativ schnell klar wurde, was uns die Aufgabe zeigen wollte.
+Da wir jeweils 3 Messungen durchgeführt haben, hat die Leistungsanalyse sehr viel Zeit in Anspruch genommen, obwohl relativ schnell klar wurde, was uns die Aufgabe zeigen wollte.
