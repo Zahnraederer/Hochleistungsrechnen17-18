@@ -1,0 +1,1 @@
+Man hätte im pragma omp parallel for reduction(max:maxresidium) angeben müssen um den Abbruch nach genauigkeit hinzubekommen.

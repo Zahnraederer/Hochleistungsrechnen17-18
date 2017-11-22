@@ -1,0 +1,13 @@
+Aufgabe 1: 3h, davon 1h Fehlersuche
+Aufgabe 2: 1h
+
+Bearbeitungszeit:  
+Schwierigkeit:     [ ] zu leicht         [X] genau richtig     [ ] zu schwer
+Lehrreich:         [ ] wenig             [X] etwas             [ ] sehr
+Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [X] verständlich
+
+Kommentar:
+Teilweise war die Implementierung etwas fummelig, aber im Grunde genommen
+ziemlich straight forward. Größere Probleme gab es nicht. Nur zum Optimieren
+des Quelltextes war leider keine Zeit mehr (das lag aber hier an anderen Modulen).
+Die Vorgabe (Speedup >= 8 bei 12 Threads) war ziemlich human, das war nett.
