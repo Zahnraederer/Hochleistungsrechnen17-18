@@ -73,9 +73,10 @@ struct timeval comp_time;        /* time when calculation completed             
 /* ************************************************************************ */
 
 void* threadFunction(void* thread_struct){
+  //printf("Thread gestartet\n");
   struct thread_struct* threadstruct = (struct thread_struct*) thread_struct;
   
-  int i;
+  int i,k;
   int N = threadstruct->end_index;
   int M = threadstruct->M;
   struct options const* options = threadstruct->options;
@@ -96,8 +97,13 @@ void* threadFunction(void* thread_struct){
   double pih = threadstruct->pih;
   double fpisin = threadstruct->fpisin;
   
-  
-  for (i = threadstruct->start_index; i < N; i++)
+  //i-1 doesn't exist for i == 0 so we ensure i > 0
+  if(threadstruct->start_index == 0)
+    k = 1;
+  else
+    k = threadstruct->start_index;
+  //printf("Laufe von %d bis %d\n",threadstruct->start_index,N);
+  for (i = k; i < N; i++)
   {
     double fpisin_i = 0.0;
     
@@ -258,6 +264,7 @@ static
 void
 calculate (struct calculation_arguments const* arguments, struct calculation_results* results, struct options const* options)
 {
+  //printf("Bin in Calculate gewesen!\n");
 	unsigned int i; //j;                                   /* local variables for loops */
 	int m1, m2;                                 /* used as indices for old and new matrices */
 	//double star;                                /* four times center value minus 4 neigh.b values */
@@ -274,6 +281,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 	struct thread_struct tstruct[options->number];
 	pthread_t threads[options->number];
+  int segments[(options->number)+1];
   //int errorcode;
 		
 	//tstruct = malloc(sizeof(tstruct)*options->number);
@@ -296,7 +304,18 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		pih = PI * h;
 		fpisin = 0.25 * TWO_PI_SQUARE * h * h;
 	}
+  
+  //printf("%d ist N\n",N);
 
+  for(i = 0; i < options->number; i++){
+    segments[i] = i*(N/options->number);
+    //printf("%d Segment Nr: %d\n",segments[i],i);
+  }
+  segments[(options->number)] = N;
+  //printf("%d Segment Nr: %d\n",segments[(int)options->number],(int)options->number);
+  
+  //exit(1);
+  
 	while (term_iteration > 0)
 	{
 		double** Matrix_Out = arguments->Matrix[m1];
@@ -305,8 +324,9 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		maxresiduum = 0;
 
 		for(i = 0; i < options->number; i++){
-		  tstruct[i].start_index = i*(N/options->number);
-		  tstruct[i].end_index = ((i+1)*(N/options->number))-1;
+      //printf("Bin im for mit i = %d\n",i);
+		  tstruct[i].start_index = segments[i];
+		  tstruct[i].end_index = segments[i+1];
 		  tstruct[i].M = N;
 		  //tstruct[i].h = h;
 		  tstruct[i].options = options;
@@ -319,6 +339,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		}
 		
 		for(i = 0; i < options->number; i++){
+      //printf("Will joinen\n");
 		  pthread_join(threads[i], NULL);
 		}
 		/* over all rows 
@@ -477,14 +498,21 @@ main (int argc, char** argv)
 	struct calculation_arguments arguments;
 	struct calculation_results results;
 
+  //printf("AskParams\n");
 	AskParams(&options, argc, argv);
-
+  
+  //printf("initVariables\n");
 	initVariables(&arguments, &results, &options);
-
+  
+  //printf("allocateMatrices\n");
 	allocateMatrices(&arguments);
+  
+  //printf("initMatricies\n");
 	initMatrices(&arguments, &options);
 
 	gettimeofday(&start_time, NULL);
+  
+  //printf("calculate\n");
 	calculate(&arguments, &results, &options);
 	gettimeofday(&comp_time, NULL);
 

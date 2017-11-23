@@ -2,37 +2,41 @@
 CC = gcc
 
 # Compiler flags, paths and libraries
-CFLAGS = -std=c11 -pedantic -Wall -Wextra -O3 -ggdb
-CFLAGS_PTHREAD = -std=c11  -pedantic -Wall -Wextra -ggdb -lpthread
-LFLAGS = $(CFLAGS)
-LFLAGS_PTHREAD = $(CFLAGS_PTHREAD)
+CFLAGS_SEQ = -std=c99 -pedantic -Wall -Wextra -O2 -ggdb
+CFLAGS_POSIX = -std=c99 -pedantic -Wall -Wextra -Ofast -flto -march=native -lpthread
+LFLAGS_SEQ = $(CFLAGS_SEQ)
+LFLAGS_POSIX = $(CFLAGS_POSIX)
 LIBS   = -lm
 
-TGTS = partdiff-seq
-OBJS = partdiff-seq.o askparams.o
-TBJS = partdiff-pthread.o askparams.o
-
+OBJS_SEQ = partdiff-seq.o askparams-seq.o
+OBJS_POSIX = partdiff-posix.o askparams-posix.o
 
 # Targets ...
-all: partdiff-seq\
-	partdiff-pthread
+all: partdiff-seq partdiff-posix
 
-partdiff-seq: $(OBJS) Makefile
-	$(CC) $(LFLAGS) -o $@ $(OBJS) $(LIBS)
+partdiff-seq: partdiff-seq.o askparams-seq.o
+	$(CC) $(LFLAGS_SEQ) -o $@ $^ $(LIBS)
+	
+partdiff-posix: partdiff-posix.o askparams-posix.o
+	$(CC) $(LFLAGS_POSIX) -o $@ $^ $(LIBS)
 
-partdiff-pthread: $(TBJS) Makefile
-	$(CC) $(LFLAGS_PTHREAD) -o $@ $(TBJS) $(LIBS)
+# Object files...
+partdiff-seq.o: partdiff-seq.c
+	$(CC) -c $(CFLAGS_SEQ) $<
+	
+partdiff-posix.o: partdiff-posix.c
+	$(CC) -c $(CFLAGS_POSIX) $<
+	
+askparams-seq.o: askparams.c
+	$(CC) -c $(CFLAGS_SEQ) $< -o $@
+	
+askparams-posix.o: askparams.c
+	$(CC) -c $(CFLAGS_POSIX) $< -o $@
 
-partdiff-pthread.o: partdiff-pthread.c Makefile
-
-partdiff-seq.o: partdiff-seq.c Makefile
-
-askparams.o: askparams.c Makefile
-
-# Rule to create *.o from *.c
-%.o: %.c
-	$(CC) -c $(CFLAGS) $*.c
-
+# PHONY...
 clean:
-	$(RM) $(OBJS)
-	$(RM) $(TGTS)
+	$(RM) *.o *~
+
+clean-all: clean
+	rm -f partdiff-seq partdiff-posix
+
