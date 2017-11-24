@@ -58,6 +58,8 @@ struct thread_struct
   double** Matrix_In;
   double pih;
   double fpisin;
+  double* residuum;
+  int term_iteration;
 };
 
 /* ************************************************************************ */
@@ -88,8 +90,10 @@ void* threadFunction(void* thread_struct){
   int j;                                      /* local variables for loops */
   //int m1, m2;                                 /* used as indices for old and new matrices */
   double star;                                /* four times center value minus 4 neigh.b values */
+  double residuum = *(threadstruct->residuum);
+  int term_iteration = threadstruct->term_iteration;
   //double residuum;                            /* residuum of current iteration */
-  //double maxresiduum;                         /* maximum residuum value of a slave in iteration */
+  double maxresiduum = *(threadstruct->residuum);                         /* maximum residuum value of a slave in iteration */
 
   //int const N = arguments->N;
   //double const h = threadstruct->h;
@@ -122,13 +126,15 @@ void* threadFunction(void* thread_struct){
         star += fpisin_i * sin(pih * (double)j);
       }
       
-      /*if (options->termination == TERM_PREC || term_iteration == 1)
+      if (options->termination == TERM_PREC || term_iteration == 1)
       {
         residuum = Matrix_In[i][j] - star;
         residuum = (residuum < 0) ? -residuum : residuum;
+        //printf("Residuum in thread: %f\n",residuum);
         maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
-      }*/
-      
+      }
+      //printf("Maxresiduum in Thread: %f",maxresiduum);
+      *(threadstruct->residuum) = maxresiduum;
       Matrix_Out[i][j] = star;
     }
   }
@@ -265,10 +271,11 @@ void
 calculate (struct calculation_arguments const* arguments, struct calculation_results* results, struct options const* options)
 {
   //printf("Bin in Calculate gewesen!\n");
-	unsigned int i; //j;                                   /* local variables for loops */
+	int i, j;                                   /* local variables for loops */
+	unsigned int k;
 	int m1, m2;                                 /* used as indices for old and new matrices */
-	//double star;                                /* four times center value minus 4 neigh.b values */
-	//double residuum;                            /* residuum of current iteration */
+	double star;                                /* four times center value minus 4 neigh.b values */
+	double sresiduum;                            /* residuum of current iteration */
 	double maxresiduum;                         /* maximum residuum value of a slave in iteration */
   
 	int const N = arguments->N;
@@ -282,39 +289,36 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 	struct thread_struct tstruct[options->number];
 	pthread_t threads[options->number];
   int segments[(options->number)+1];
+  double residuum[options->number];
+  //printf("before residuum setting\n");
+  //residuum[0] = 5.0;
+  //printf("after residuum setting\n");
   //int errorcode;
 		
-	//tstruct = malloc(sizeof(tstruct)*options->number);
-	//threads = malloc(sizeof(pthread_t)*options->number);
-	
-	/* initialize m1 and m2 depending on algorithm */
-	if (options->method == METH_JACOBI)
-	{
-		m1 = 0;
-		m2 = 1;
-	}
-	else
-	{
-		m1 = 0;
-		m2 = 0;
-	}
-
-	if (options->inf_func == FUNC_FPISIN)
-	{
-		pih = PI * h;
-		fpisin = 0.25 * TWO_PI_SQUARE * h * h;
-	}
   
   //printf("%d ist N\n",N);
 
-  for(i = 0; i < options->number; i++){
-    segments[i] = i*(N/options->number);
+  for(k = 0; k < options->number; k++){
+    segments[k] = k*(N/options->number);
     //printf("%d Segment Nr: %d\n",segments[i],i);
   }
   segments[(options->number)] = N;
   //printf("%d Segment Nr: %d\n",segments[(int)options->number],(int)options->number);
   
   //exit(1);
+
+	if (options->inf_func == FUNC_FPISIN)
+	{
+		pih = PI * h;
+		fpisin = 0.25 * TWO_PI_SQUARE * h * h;
+	}
+
+/*--------------------Jacobi--------------------------------------------------*/
+	/* initialize m1 and m2 depending on algorithm */
+	if (options->method == METH_JACOBI)
+	{
+		m1 = 0;
+		m2 = 1;
   
 	while (term_iteration > 0)
 	{
@@ -323,26 +327,73 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 		maxresiduum = 0;
 
-		for(i = 0; i < options->number; i++){
+		for(k = 0; k < options->number; k++){
       //printf("Bin im for mit i = %d\n",i);
-		  tstruct[i].start_index = segments[i];
-		  tstruct[i].end_index = segments[i+1];
-		  tstruct[i].M = N;
+		  tstruct[k].start_index = segments[k];
+		  tstruct[k].end_index = segments[k+1];
+		  tstruct[k].M = N;
 		  //tstruct[i].h = h;
-		  tstruct[i].options = options;
-		  tstruct[i].Matrix_Out = Matrix_Out;
-		  tstruct[i].Matrix_In = Matrix_In ;
-		  tstruct[i].pih = pih;
-		  tstruct[i].fpisin = fpisin;
-		  
-		  assert(!pthread_create(&threads[i],NULL,threadFunction,&tstruct[i]));
+		  tstruct[k].options = options;
+		  tstruct[k].Matrix_Out = Matrix_Out;
+		  tstruct[k].Matrix_In = Matrix_In ;
+		  tstruct[k].pih = pih;
+		  tstruct[k].fpisin = fpisin;
+      residuum[k] = maxresiduum;
+      //printf("got here!\n");
+      tstruct[k].residuum = &residuum[k];
+      //printf("residuum[i] = %f  &residuum[i] = %p\n",residuum[i],(void*) &residuum[i]);
+      tstruct[k].term_iteration = term_iteration;
+      
+		  assert(!pthread_create(&threads[k],NULL,threadFunction,&tstruct[k]));
 		}
 		
-		for(i = 0; i < options->number; i++){
+		for(k = 0; k < options->number; k++){
       //printf("Will joinen\n");
-		  pthread_join(threads[i], NULL);
+		  pthread_join(threads[k], NULL);
 		}
-		/* over all rows 
+
+    for(k = 0; k < options->number; k++){
+      maxresiduum = (residuum[k] < maxresiduum) ? maxresiduum : residuum[k];
+      //printf("Residuum = %f Maxresiduum = %f\n",residuum[i],maxresiduum);
+    }
+		results->stat_iteration++;
+		results->stat_precision = maxresiduum;
+
+		/* exchange m1 and m2 */
+		i = m1;
+		m1 = m2;
+		m2 = i;
+
+		/* check for stopping calculation depending on termination method */
+		if (options->termination == TERM_PREC)
+		{
+			if (maxresiduum < options->term_precision)
+			{
+				term_iteration = 0;
+			}
+		}
+		else if (options->termination == TERM_ITER)
+		{
+			term_iteration--;
+		}
+	}
+
+	}
+
+/*--------------------Gaus-Seidel---------------------------------------------*/
+	else
+	{
+		m1 = 0;
+		m2 = 0;
+	while (term_iteration > 0)
+	{
+		double** Matrix_Out = arguments->Matrix[m1];
+		double** Matrix_In  = arguments->Matrix[m2];
+
+		maxresiduum = 0;
+
+
+		/* over all rows */
 		for (i = 1; i < N; i++)
 		{
 			double fpisin_i = 0.0;
@@ -364,15 +415,15 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 				if (options->termination == TERM_PREC || term_iteration == 1)
 				{
-					residuum = Matrix_In[i][j] - star;
-					residuum = (residuum < 0) ? -residuum : residuum;
-					maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
+					sresiduum = Matrix_In[i][j] - star;
+					sresiduum = (sresiduum < 0) ? -sresiduum : sresiduum;
+					maxresiduum = (sresiduum < maxresiduum) ? maxresiduum : sresiduum;
 				}
 
 				Matrix_Out[i][j] = star;
 			}
 		}
-    */
+
 		results->stat_iteration++;
 		results->stat_precision = maxresiduum;
 
@@ -393,6 +444,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		{
 			term_iteration--;
 		}
+	}
+
 	}
 
 	//free(tstruct);
