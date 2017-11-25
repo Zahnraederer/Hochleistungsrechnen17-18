@@ -93,7 +93,7 @@ void* threadFunction(void* thread_struct){
   double residuum = *(threadstruct->residuum);
   int term_iteration = threadstruct->term_iteration;
   //double residuum;                            /* residuum of current iteration */
-  double maxresiduum = *(threadstruct->residuum);                         /* maximum residuum value of a slave in iteration */
+  double* maxresiduum = threadstruct->residuum;                         /* maximum residuum value of a slave in iteration */
 
   //int const N = arguments->N;
   //double const h = threadstruct->h;
@@ -131,10 +131,10 @@ void* threadFunction(void* thread_struct){
         residuum = Matrix_In[i][j] - star;
         residuum = (residuum < 0) ? -residuum : residuum;
         //printf("Residuum in thread: %f\n",residuum);
-        maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
+        *maxresiduum = (residuum < *maxresiduum) ? *maxresiduum : residuum;
       }
       //printf("Maxresiduum in Thread: %f",maxresiduum);
-      *(threadstruct->residuum) = maxresiduum;
+      //*(threadstruct->residuum) = maxresiduum;
       Matrix_Out[i][j] = star;
     }
   }
@@ -313,6 +313,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		fpisin = 0.25 * TWO_PI_SQUARE * h * h;
 	}
 
+	m1 = 0;
+	m2 = 1;
 /*--------------------Jacobi--------------------------------------------------*/
 	/* initialize m1 and m2 depending on algorithm */
 	if (options->method == METH_JACOBI)
@@ -393,7 +395,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		maxresiduum = 0;
 
 
-		/* over all rows */
+		// over all rows 
 		for (i = 1; i < N; i++)
 		{
 			double fpisin_i = 0.0;
@@ -427,12 +429,12 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		results->stat_iteration++;
 		results->stat_precision = maxresiduum;
 
-		/* exchange m1 and m2 */
+		// exchange m1 and m2 
 		i = m1;
 		m1 = m2;
 		m2 = i;
 
-		/* check for stopping calculation depending on termination method */
+		//check for stopping calculation depending on termination method
 		if (options->termination == TERM_PREC)
 		{
 			if (maxresiduum < options->term_precision)
