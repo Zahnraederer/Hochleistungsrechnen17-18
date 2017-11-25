@@ -1,0 +1,10 @@
+﻿Die Bearbeitungszeit bitte in ganzen Stunden angeben (aufrunden).
+In den restlichen Zeilen jeweils ein X in der zutreffenden Spalte setzen.
+
+Bearbeitungszeit:  3-4h Coden (davon mindestens 1,5h für das debugging) + 1,5h Messung und fertigen der Abgabe
+Schwierigkeit:     [ ] zu leicht         [x] genau richtig     [ ] zu schwer
+Lehrreich:         [ ] wenig             [ ] etwas             [x] sehr
+Verständlichkeit:  [ ] großteils unklar  [ ] teilweise unklar  [x] verständlich
+
+Kommentar:
+Obwohl wir für diese Aufgabe das Script von Tim Jammer hatte, hat die Zeitmessung wieder viel Zeit in Anspruch genommen. Da uns bereits kleine Fehler im Programm daran gehindert haben, die Messungen effektiv durchzuführen und die Aufgabe nur aus coden und messen bestand, wurde es zeitlich relativ sehr eng mit der Abgabe.
