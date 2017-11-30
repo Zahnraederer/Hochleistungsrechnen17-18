@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  //long int usec = 0;
+  long int usec = 0;
  
   if(rank == 0){
     for(int i = 1; i < size;i++){
@@ -40,10 +40,10 @@ int main(int argc, char** argv) {
     package.time = time;
     MPI_Send(&package,sizeof(package),MPI_BYTE,0,0,MPI_COMM_WORLD);
   }
-//  MPI_Reduce(&package.time.tv_usec, &usec,1,MPI_LONG,MPI_MIN,0,MPI_COMM_WORLD);
-  //if(rank == 0){
-    //printf("%ld\n",usec);
-  //}
+  MPI_Reduce(&package.time.tv_usec, &usec,1,MPI_LONG,MPI_MIN,0,MPI_COMM_WORLD);
+  if(rank == 0){
+    printf("%ld\n",usec);
+  }
   MPI_Barrier(MPI_COMM_WORLD);
   printf("Rang %d endet jetzt!\n", rank);
   // Finalize the MPI environment.
