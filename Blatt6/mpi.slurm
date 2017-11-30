@@ -19,5 +19,5 @@ then
 	export MPICH_NEMESIS_NETMOD=ib
 fi
 
-srun hostname
+#srun hostname
 mpiexec ./timempi
