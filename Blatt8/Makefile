@@ -1,7 +1,7 @@
 .PHONY: clean
 
 CC = mpicc
-CFLAGS = -std=c11 -O3 -Wall -Wextra -Werror -ggdb
+CFLAGS = -std=c11 -O3 -Wall -Wextra -Werror -ggdb -lm
 LDFLAGS = $(CFLAGS)
 
 all: partdiff-par
