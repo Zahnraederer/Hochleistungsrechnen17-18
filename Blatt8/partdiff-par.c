@@ -15,7 +15,7 @@
 
 //Erstellt einen Speicherblock für double der Dimension N*k
 double** createMatrix(uint64_t N, uint64_t k){
-  printf("In createMatrix mit N:%ld k:%ld\n",N,k);
+  //printf("In createMatrix mit N:%ld k:%ld\n",N,k);
   uint64_t i,j;
   
   double* M = malloc( (N) * (k) * sizeof(double));
@@ -85,6 +85,7 @@ int main (int argc, char** argv){
   double star;
   double PI = 3.141592653589793;
   double TWO_PI_SQUARE = (2 * PI * PI);
+  MPI_Request req;
 
   if (argc < 2)
   {
@@ -113,27 +114,65 @@ int main (int argc, char** argv){
   Matrix_In = init(N,segments,rest,rank,&k,size);
   Matrix_Out = init(N,segments,rest,rank,&k,size);
   //Merken: Er kann auf elemente hinter der letzten Spalte zugreifen und die sind 0.0
-  printf("Matrix_In[1][1] = %f Matrix_In[k-2][N-2] = %f Mit k = %ld und N=%ld\n",Matrix_In[1][1],Matrix_In[k-2][N-2],k,N);
+  //printf("Matrix_In[1][1] = %f Matrix_In[k-2][N-2] = %f Mit k = %ld und N=%ld\n",Matrix_In[1][1],Matrix_In[k-2][N-2],k,N);
 
   double h = 1.0/(double)N;
   double pih = PI * h;
   double fpisin = 0.25 * TWO_PI_SQUARE * h * h;
-  printf("Iter ist:%lu h:%f  pih:%f fpisin:%f \n",iter,h,pih,fpisin);
+  //printf("Iter ist:%lu h:%f  pih:%f fpisin:%f \n",iter,h,pih,fpisin);
     
   for(i = 0; i <= iter; i++){
     
     //over all rows
-    for (j = 1; j < k-1; j++){
+    for (j = 1; j <= k-2; j++){
       double fpisin_i = 0.0;
       fpisin_i = fpisin * sin(pih * (double)j);
       
       //over all columns
-      for (l = 1; l < N-1; l++){
+      for (l = 1; l <= N-2; l++){
         star = 0.25 * (Matrix_In[j-1][l] + Matrix_In[j][l-1] + Matrix_In[j][l+1] + Matrix_In[j+1][l]);
         star += fpisin_i * sin(pih * (double)l);
         //if(!(iter % 25))
           //printf("star: %f sin(x): %f\n",star,sin(pih * (double)j));
         Matrix_Out[j][l] = star;
+      }
+      
+      if(j == 1){
+        //Sende erste Zeile an vorgaenger wenn wir nicht 0 sind
+        if(rank != 0){
+          MPI_Isend(Matrix_Out[j],N,MPI_DOUBLE, rank-1,
+                    0,MPI_COMM_WORLD, &req);
+        //MPI_Send(buf,k+rest,MPI_INT,rank+1,0,MPI_COMM_WORLD);
+          printf("Rank %d hat gesendet!\n",rank);
+        }
+      }
+      
+      
+      if(j == k-3){
+        //empfange von nachfolger
+        if(rank != size-1){
+          MPI_Recv(Matrix_In[k-1],N,MPI_DOUBLE,rank+1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+        
+          printf("Rank %d hat empfangen!\n",rank);
+        }
+      }
+      
+      
+      if(j == k-2){
+        //Sende an Nachfolger
+        if(rank != size-1){
+          MPI_Isend(Matrix_Out[k-2],N,MPI_DOUBLE, rank+1,
+                    0,MPI_COMM_WORLD, &req);
+        
+        
+          printf("Rank %d hat 2x gesendet!\n",rank);
+        }
+        if(rank != 0){
+        //Empfange von Vorgaenger
+          MPI_Recv(Matrix_In[0],N,MPI_DOUBLE,rank-1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+        
+          printf("Rank %d hat 2x empfangen!\n",rank);
+        }
       }
     }
   }
