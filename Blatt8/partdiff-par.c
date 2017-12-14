@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+#include "partdiff-par.h"
 
 //#ifndef PI
 //#define PI 			3.141592653589793
@@ -72,8 +73,12 @@ double** init (uint64_t N,uint64_t k,uint64_t rest,int rank,uint64_t* newK,int s
 int main (int argc, char** argv){
   MPI_Init(&argc,&argv);
   
-  char arg[256];
-  char argIter[256];
+  struct options options;
+  //struct calculation_arguments arguments;
+  //struct calculation_results results;
+  
+  //char arg[256];
+  //char argIter[256];
   uint64_t N;
   uint64_t k;
   uint64_t iter;
@@ -83,18 +88,9 @@ int main (int argc, char** argv){
   double** Matrix_In;
   double** Matrix_Out;
   double star;
-  double PI = 3.141592653589793;
-  double TWO_PI_SQUARE = (2 * PI * PI);
+  //double PI = 3.141592653589793;
+  //double TWO_PI_SQUARE = (2 * PI * PI);
   MPI_Request req;
-
-  if (argc < 2)
-  {
-    printf("Arguments error!\n");
-    return EXIT_FAILURE;
-  }
-
-  sscanf(argv[1], "%s", arg);
-  sscanf(argv[2], "%s", argIter);
 
   //size
   MPI_Comm_size(MPI_COMM_WORLD,&size);
@@ -104,9 +100,35 @@ int main (int argc, char** argv){
   }
   //myrank
   MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-  // Array length
-  N = atoi(arg);
-  iter = atoi(argIter);
+
+  //Haben wir weniger als 7 Parameter haben...
+  if (argc < 7){
+    //Muss der erste nachfragen
+    if(rank == 0){
+      AskParams(&options, argc, argv);
+    }
+  }
+  //Anderenfalls kann AskParams benutzt werden zum Parsen in jedem Prozess
+  else{
+    AskParams(&options, argc, argv);
+  }
+
+  /*
+  struct options{
+  uint64_t number;         // Number of threads                              /
+  uint64_t method;         // Gauss Seidel or Jacobi method of iteration     /
+  uint64_t interlines;     // matrix size = interlines*8+9                   /
+  uint64_t inf_func;       // inference function                             /
+  uint64_t termination;    // termination condition                          /
+  uint64_t term_iteration; // terminate if iteration number reached          /
+  double   term_precision; // terminate if precision reached                 /
+  };
+  */
+  
+  
+  // LineLength as usual N * 8 + 9 - 1
+  N =  (options.interlines+1)*8;//atoi(arg);
+  iter = options.term_iteration;//atoi(argIter);
   //Abgerundete Elementzahl
   uint64_t segments = N/size;
   uint64_t rest = N%size;
@@ -143,7 +165,7 @@ int main (int argc, char** argv){
           MPI_Isend(Matrix_Out[j],N,MPI_DOUBLE, rank-1,
                     0,MPI_COMM_WORLD, &req);
         //MPI_Send(buf,k+rest,MPI_INT,rank+1,0,MPI_COMM_WORLD);
-          printf("Rank %d hat gesendet!\n",rank);
+          printf("Rank %d hat Nach oben gesendet!\n",rank);
         }
       }
       
@@ -153,7 +175,7 @@ int main (int argc, char** argv){
         if(rank != size-1){
           MPI_Recv(Matrix_In[k-1],N,MPI_DOUBLE,rank+1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         
-          printf("Rank %d hat empfangen!\n",rank);
+          printf("Rank %d hat von unten empfangen!\n",rank);
         }
       }
       
@@ -165,13 +187,13 @@ int main (int argc, char** argv){
                     0,MPI_COMM_WORLD, &req);
         
         
-          printf("Rank %d hat 2x gesendet!\n",rank);
+          printf("Rank %d hat nach unten gesendet!\n",rank);
         }
         if(rank != 0){
         //Empfange von Vorgaenger
           MPI_Recv(Matrix_In[0],N,MPI_DOUBLE,rank-1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         
-          printf("Rank %d hat 2x empfangen!\n",rank);
+          printf("Rank %d hat von oben empfangen!\n",rank);
         }
       }
     }
