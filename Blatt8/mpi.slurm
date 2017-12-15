@@ -20,4 +20,4 @@ then
 fi
 
 #srun hostname
-mpiexec ./partdiff-par 1 1 1 2 2 1
+mpiexec ./partdiff-par 1 2 0 2 2 1
