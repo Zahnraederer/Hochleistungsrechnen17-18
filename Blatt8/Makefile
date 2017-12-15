@@ -6,7 +6,7 @@ LDFLAGS = $(CFLAGS)
 
 all: partdiff-par
 
-partdiff-par: partdiff-par.o displaymatrix-mpi.o askparams.o
+partdiff-par: partdiff-par.o displaymatrix-mpi.o askparams.o partdiff-seq.o
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 partdiff-par.o: partdiff-par.c
@@ -16,6 +16,9 @@ displaymatrix-mpi.o: displaymatrix-mpi.c
 	$(CC) -c $(CFLAGS) $<
 
 askparams.o: askparams.c
+	$(CC) -c $(CFLAGS) $<
+
+partdiff-seq.o: partdiff-seq.c
 	$(CC) -c $(CFLAGS) $<
 
 clean: 

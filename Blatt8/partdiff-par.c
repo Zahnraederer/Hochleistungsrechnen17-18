@@ -7,6 +7,7 @@
 #include <inttypes.h>
 
 #include "partdiff-par.h"
+//#include "partdiff-seq.c"
 
 //#ifndef PI
 //#define PI 			3.141592653589793
@@ -47,7 +48,8 @@ double** createMatrix(uint64_t N, uint64_t k){
   return Matrix;
 }
 
-double** init (uint64_t N,uint64_t k,uint64_t rest,int rank,uint64_t* newK,int size){
+double** init (uint64_t N,uint64_t k,uint64_t rest,int rank,uint64_t* newK,int
+               size){
   
   //printf("In init mit N:%ld k:%ld rest:%ld rank:%d\n",N,k,rest,rank);
   double** Matrix;
@@ -70,6 +72,7 @@ double** init (uint64_t N,uint64_t k,uint64_t rest,int rank,uint64_t* newK,int s
   return Matrix;
 }
 
+
 int main (int argc, char** argv){
   MPI_Init(&argc,&argv);
   
@@ -87,17 +90,24 @@ int main (int argc, char** argv){
   int size;
   double** Matrix_In;
   double** Matrix_Out;
+  double** tmp;
   double star;
   //double PI = 3.141592653589793;
   //double TWO_PI_SQUARE = (2 * PI * PI);
   MPI_Request req;
 
+  //int* foo = allocateMemory(5);
+  
   //size
   MPI_Comm_size(MPI_COMM_WORLD,&size);
   if(size == 1){
-    printf("Nothing to be done for a single Thread!\n");
+    //printf("Nothing to be done for a single Thread!\n");
+    seq_Call(argc,argv);
+    MPI_Finalize();
     return EXIT_SUCCESS;
   }
+  
+  
   //myrank
   MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 
@@ -113,6 +123,15 @@ int main (int argc, char** argv){
     AskParams(&options, argc, argv);
   }
 
+  //Bei Gauß-Seidel nur sequentiell
+  if(options.method == 1){
+    if(rank == 0)
+      seq_Call(argc,argv);
+
+    MPI_Finalize();
+    return EXIT_SUCCESS;
+  }
+  
   /*
   struct options{
   uint64_t number;         // Number of threads                              /
@@ -129,14 +148,16 @@ int main (int argc, char** argv){
   // LineLength as usual N * 8 + 9 - 1
   N =  (options.interlines+1)*8;//atoi(arg);
   iter = options.term_iteration;//atoi(argIter);
+  
   //Abgerundete Elementzahl
   uint64_t segments = N/size;
   uint64_t rest = N%size;
 
   Matrix_In = init(N,segments,rest,rank,&k,size);
   Matrix_Out = init(N,segments,rest,rank,&k,size);
-  //Merken: Er kann auf elemente hinter der letzten Spalte zugreifen und die sind 0.0
-  //printf("Matrix_In[1][1] = %f Matrix_In[k-2][N-2] = %f Mit k = %ld und N=%ld\n",Matrix_In[1][1],Matrix_In[k-2][N-2],k,N);
+  //Er kann auf elemente hinter der letzten Spalte zugreifen und die sind 0.0
+  //printf("Matrix_In[1][1] = %f Matrix_In[k-2][N-2] = %f Mit k = %ld und N=%ld
+  //\n",Matrix_In[1][1],Matrix_In[k-2][N-2],k,N);
 
   double h = 1.0/(double)N;
   double pih = PI * h;
@@ -152,7 +173,8 @@ int main (int argc, char** argv){
       
       //over all columns
       for (l = 1; l <= N-2; l++){
-        star = 0.25 * (Matrix_In[j-1][l] + Matrix_In[j][l-1] + Matrix_In[j][l+1] + Matrix_In[j+1][l]);
+        star = 0.25 * (Matrix_In[j-1][l] + Matrix_In[j][l-1] + Matrix_In[j][l+1]
+                       + Matrix_In[j+1][l]);
         star += fpisin_i * sin(pih * (double)l);
         //if(!(iter % 25))
           //printf("star: %f sin(x): %f\n",star,sin(pih * (double)j));
@@ -173,7 +195,8 @@ int main (int argc, char** argv){
       if(j == k-3){
         //empfange von nachfolger
         if(rank != size-1){
-          MPI_Recv(Matrix_In[k-1],N,MPI_DOUBLE,rank+1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+          MPI_Recv(Matrix_In[k-1],N,MPI_DOUBLE,rank+1,0,MPI_COMM_WORLD,
+                   MPI_STATUS_IGNORE);
         
           printf("Rank %d hat von unten empfangen!\n",rank);
         }
@@ -191,16 +214,19 @@ int main (int argc, char** argv){
         }
         if(rank != 0){
         //Empfange von Vorgaenger
-          MPI_Recv(Matrix_In[0],N,MPI_DOUBLE,rank-1,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+          MPI_Recv(Matrix_In[0],N,MPI_DOUBLE,rank-1,0,MPI_COMM_WORLD,
+                   MPI_STATUS_IGNORE);
         
           printf("Rank %d hat von oben empfangen!\n",rank);
         }
       }
     }
+    tmp = Matrix_In;
+    Matrix_In = Matrix_Out;
+    Matrix_Out = tmp;
   }
   
   printf("Matrix_Out[1][1] = %f Matrix_Out[k-2][N-2] = %f Mit k = %ld und N=%ld\n",Matrix_Out[1][1],Matrix_Out[k-2][N-2],k,N);
-  
   
   
   free(Matrix_Out[0]);

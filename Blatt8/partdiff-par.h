@@ -53,3 +53,4 @@ struct options
 /* - displaymatrix.c           */
 /* *************************** */
 void AskParams (struct options*, int, char**);
+void seq_Call(int argc,char** argv);
