@@ -1,0 +1,73 @@
+Im Psedocode abgekürzt ist die berechnung mit dem stern als calculateElement
+Sowie die berechnung des Residuums mit MaxResiduum diese erfolgen wir gehabt
+Pseudocode:
+
+calculate(args){
+  bool initialized = false
+  int residuum_iter = 0
+  int residuum_total_iter = 0
+  bool residuum_rest = false;
+  double residuum = 0
+  if(term_iter == true){
+    for(i = 0; i < number_iter; i++){
+      //Schon in der ersten Iteration müssen wir empfangen
+      if(!rank = 0)
+        MPI_Recive(last_row,...)
+      for(j = 1; j < number_colums-1; j++){
+        for(k = 1; k < number_rows; k++)
+          MatrixPart[j,k] = calculateElement(j,k)
+
+        if(number_coulums == 1 && rank != 1)
+          //An den Vorgänger schicken
+          MPI_Send(firs_row,....)
+      }
+      //Vor dem berechnen der letzten Reihe wenn nötig empfangen
+      if(initialized == true || rank == last_rank)
+        MPI_Recive(first_row,....)
+      //Die letzte Reihe berechnen
+      for(k = 1; k < number_rows; k++)
+        MatrixPart[number_colums,k] = calculateElement(j,k)
+      MPI_Send(last_row,...)
+      //Nach der ersten Iteration müssen wir immer die letzte reihe empfangen
+      initialized = true
+    }
+  }
+
+  else if(term_residuum){
+    //Solange rechnen bis die gleiche Iterationszahl mit richtigem res da ist
+    while( residuum_rest != true && residuum_iter != residuum_total_iter)
+    if(!rank = 0)
+      MPI_Recive(last_row,...)
+    for(j = 1; j < number_colums-1; j++){
+      for(k = 1; k < number_rows; k++){
+        MatrixPart[j,k] = calculateElement(j,k)
+        residuum = MaxResiduum(MatrixPart[j,k])
+      }
+      if(number_coulums == 1 && rank != 1)
+        //An den Vorgänger schicken
+        MPI_Send(firs_row,....)
+    }
+    //Vor dem berechnen der letzten Reihe wenn nötig empfangen
+    if(initialized == true || rank == last_rank)
+      MPI_Recive(first_row,....)
+    //Die letzte Reihe berechnen
+    for(k = 1; k < number_rows; k++){
+      MatrixPart[number_colums,k] = calculateElement(j,k);
+      residuum = MaxResiduum(MatrixPart[number_colums,k])
+    }
+    MPI_Send(last_row,...)
+    //Nach der ersten Iteration müssen wir immer die letzte reihe empfangen
+    initialized = true
+    residuum_iter++;
+    if(!residuum_rest)
+      residuum_total_iter++
+    //Wenn alle threads schon laufen
+    if( (!residuum_rest) && residuum_iter >= last_rank - rank){
+      MPI_Reduce(residuum,MPI_Min,...)
+      if(residuum < max_residuum){
+        MPI_Reduce(residuum_total_iter,MPI_Max,...)
+        residuum_rest = true;
+      }
+    }
+  }   
+}
