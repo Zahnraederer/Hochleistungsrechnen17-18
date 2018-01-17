@@ -26,26 +26,28 @@
 #include <math.h>
 #include <malloc.h>
 #include <sys/time.h>
+#include <mpi.h>
 
 //#include "askparams.c"
 #include "partdiff-par.h"
 
+/*
 struct calculation_arguments
 {
-	uint64_t  N;              /* number of spaces between lines (lines=N+1)     */
-	uint64_t  num_matrices;   /* number of matrices                             */
-	double    h;              /* length of a space between two lines            */
-	double    ***Matrix;      /* index matrix used for addressing M             */
-	double    *M;             /* two matrices with real values                  */
+	uint64_t  N;              // number of spaces between lines (lines=N+1)     /
+	uint64_t  num_matrices;   // number of matrices                             /
+	double    h;              // length of a space between two lines            /
+	double    ***Matrix;      // index matrix used for addressing M             /
+	double    *M;             // two matrices with real values                  /
 };
 
 struct calculation_results
 {
 	uint64_t  m;
-	uint64_t  stat_iteration; /* number of current iteration                    */
-	double    stat_precision; /* actual precision of all slaves in iteration    */
+	uint64_t  stat_iteration; // number of current iteration                    /
+	double    stat_precision; // actual precision of all slaves in iteration    /
 };
-
+*/
 /* ************************************************************************ */
 /* Global variables                                                         */
 /* ************************************************************************ */
@@ -334,9 +336,9 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 }
 
 /****************************************************************************/
-/** Beschreibung der Funktion DisplayMatrix:                               **/
+/** Beschreibung der Funktion DisplayMatrixSeq:                               **/
 /**                                                                        **/
-/** Die Funktion DisplayMatrix gibt eine Matrix                            **/
+/** Die Funktion DisplayMatrixSeq gibt eine Matrix                            **/
 /** in einer "ubersichtlichen Art und Weise auf die Standardausgabe aus.   **/
 /**                                                                        **/
 /** Die "Ubersichtlichkeit wird erreicht, indem nur ein Teil der Matrix    **/
@@ -345,7 +347,7 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 /****************************************************************************/
 static
 void
-DisplayMatrix (struct calculation_arguments* arguments, struct calculation_results* results, struct options* options)
+DisplayMatrixSeq (struct calculation_arguments* arguments, struct calculation_results* results, struct options* options)
 {
 	int x, y;
 
@@ -389,7 +391,7 @@ void seq_Call(int argc,char** argv){
   gettimeofday(&comp_time, NULL);
   
   displayStatistics(&arguments, &results, &options);
-  DisplayMatrix(&arguments, &results, &options);
+  DisplayMatrixSeq(&arguments, &results, &options);
   
   freeMatrices(&arguments);
   
@@ -415,7 +417,7 @@ main (int argc, char** argv)
 	gettimeofday(&comp_time, NULL);
 
 	displayStatistics(&arguments, &results, &options);
-	DisplayMatrix(&arguments, &results, &options);
+	DisplayMatrixSeq(&arguments, &results, &options);
 
 	freeMatrices(&arguments);
 

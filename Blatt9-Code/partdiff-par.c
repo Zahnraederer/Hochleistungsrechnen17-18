@@ -15,6 +15,85 @@
 //#define TWO_PI_SQUARE 		(2 * PI * PI)
 
 
+//------------------------------------------------------------------------------
+
+void DisplayMatrix (/*struct calculation_arguments* arguments, struct calculation_results* results, */struct options* options, int rank, int size, int from, int to,double** Matrix_In)
+{
+  int const elements = 8 * options->interlines + 9;
+  
+  int x, y;
+  double** Matrix = Matrix_In;
+  MPI_Status status;
+  
+  // first line belongs to rank 0
+  if (rank == 0){
+    from--;
+  }
+  
+  // last line belongs to rank size - 1
+  if (rank + 1 == size){
+    to++;
+  }
+  
+  printf("Display Matrix rank = %d from = %d to = %d\n",rank,from,to);
+  if (rank == 0)
+    printf("Matrix:\n");
+  
+  for (y = 0; y < 9; y++)
+  {
+    int line = y * (options->interlines + 1);
+    
+    if (rank == 0)
+    {
+      // check whether this line belongs to rank 0
+      if (line < from || line > to)
+      {
+        // use the tag to receive the lines in the correct order
+        // the line is stored in Matrix[0], because we do not need it anymore
+        MPI_Recv(Matrix[0], elements, MPI_DOUBLE, MPI_ANY_SOURCE, 42 + y, MPI_COMM_WORLD, &status);
+      }
+    }
+    else
+    {
+      if (line >= from && line <= to)
+      {
+        // if the line belongs to this process, send it to rank 0
+        // (line - from + 1) is used to calculate the correct local address
+        printf("Sending %f to %f  from rank %d\n",Matrix[line - from + 1][0],Matrix[line - from + 1][options->interlines],rank);
+
+        MPI_Send(Matrix[line - from + 1], elements, MPI_DOUBLE, 0, 42 + y, MPI_COMM_WORLD);
+      }
+    }
+    
+    if (rank == 0)
+    {
+      for (x = 0; x < 9; x++)
+      {
+       // int col = x * (options->interlines + 1);
+        
+        if (line >= from && line <= to)
+        {
+          // this line belongs to rank 0
+         // printf("%7.4f", Matrix[line][col]);
+        }
+        else
+        {
+          // this line belongs to another rank and was received above
+          //printf("%7.4f", Matrix[0][col]);
+        }
+      }
+      
+      printf("\n");
+    }
+  }
+  
+  fflush(stdout);
+}
+
+//------------------------------------------------------------------------------
+
+
+
 //Erstellt einen Speicherblock für double der Dimension N*k
 double** createMatrix(uint64_t N, uint64_t k){
   //printf("In createMatrix mit N:%ld k:%ld\n",N,k);
@@ -117,9 +196,9 @@ void calculate_Gaus(uint64_t N,uint64_t iter,double** Matrix_In,uint64_t rows, s
                  MPI_STATUS_IGNORE);
       }
       if((initialized == 1) && (rank != 0)){
-        printf("Will jetzt auf den Send warten!\n");
+        //printf("Will jetzt auf den Send warten!\n");
         MPI_Wait(&SendFirstRowReq, MPI_STATUS_IGNORE);
-        printf("Habe korrekt auf die erste Zeilenversendung gewartet!\n");
+        //printf("Habe korrekt auf die erste Zeilenversendung gewartet!\n");
       }
       
       //Ueber die Zeilen
@@ -135,7 +214,7 @@ void calculate_Gaus(uint64_t N,uint64_t iter,double** Matrix_In,uint64_t rows, s
         }
         if((i == 1) && (rank != 0)){
           //An den Vorgänger schicken
-          printf("Habe an den vorgaenger abgeschickt!\n");
+          //printf("Habe an den vorgaenger abgeschickt!\n");
           MPI_Isend(Matrix_In[1],N,MPI_DOUBLE, rank-1,
                     0,MPI_COMM_WORLD, &SendFirstRowReq);
         }
@@ -315,12 +394,24 @@ int main (int argc, char** argv){
   //printf("Matrix_In[1][1] = %f Matrix_In[k-2][N-2] = %f Mit k = %ld und N=%ld
   //\n",Matrix_In[1][1],Matrix_In[k-2][N-2],k,N);
 
+  //arguments.N = N;
+  //arguments.num_matrices = (options.method == METH_JACOBI) ? 2 : 1;
+  //arguments.h = 1.0 / N;
+  //arguments.Matrix = &Matrix_In;
+  
+  //results.m = 0;
+  //results.stat_iteration = 0;
+  //results.stat_precision = 0;
+  
+  
   //Bei Gauß-Seidel nur sequentiell
   if(options.method == 1){
     if(rank == 0)
       printf("Gaus-Seidel benutzen\n");
 
     calculate_Gaus(N,iter,Matrix_In,k,&options);
+    MPI_Barrier(MPI_COMM_WORLD);
+    DisplayMatrix(/*&arguments,&results,*/&options,rank,size,1,options.interlines,Matrix_In);
     
     MPI_Finalize();
     return EXIT_SUCCESS;

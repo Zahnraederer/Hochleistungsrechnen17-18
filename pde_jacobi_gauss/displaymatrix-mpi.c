@@ -8,12 +8,9 @@
  * - Each process stores two halo lines in its matrix (except for ranks 0 and 3 that only store one).
  * - For instance: Rank 2 has four lines 0-3 but only calculates 1-2 because 0 and 3 are halo lines for other processes. It is responsible for (global) lines 5-6.
  */
-
-#include "partdiff-par.h"
-
 static
 void
-DisplayMatrix (struct calculation_arguments* arguments, struct calculation_results* results, struct options* options, int rank, int size, int from, int to)
+DisplayMatrix_mpi (struct calculation_arguments* arguments, struct calculation_results* results, struct options* options, int rank, int size, int from, int to)
 {
   int const elements = 8 * options->interlines + 9;
 
@@ -21,11 +18,11 @@ DisplayMatrix (struct calculation_arguments* arguments, struct calculation_resul
   double** Matrix = arguments->Matrix[results->m];
   MPI_Status status;
 
-  // first line belongs to rank 0
+  /* first line belongs to rank 0 */
   if (rank == 0)
     from--;
 
-  // last line belongs to rank size - 1
+  /* last line belongs to rank size - 1 */
   if (rank + 1 == size)
     to++;
 
@@ -38,11 +35,11 @@ DisplayMatrix (struct calculation_arguments* arguments, struct calculation_resul
 
     if (rank == 0)
     {
-      // check whether this line belongs to rank 0
+      /* check whether this line belongs to rank 0 */
       if (line < from || line > to)
       {
-        // use the tag to receive the lines in the correct order
-        // the line is stored in Matrix[0], because we do not need it anymore
+        /* use the tag to receive the lines in the correct order
+         * the line is stored in Matrix[0], because we do not need it anymore */
         MPI_Recv(Matrix[0], elements, MPI_DOUBLE, MPI_ANY_SOURCE, 42 + y, MPI_COMM_WORLD, &status);
       }
     }
@@ -50,8 +47,8 @@ DisplayMatrix (struct calculation_arguments* arguments, struct calculation_resul
     {
       if (line >= from && line <= to)
       {
-        // if the line belongs to this process, send it to rank 0
-        // (line - from + 1) is used to calculate the correct local address
+        /* if the line belongs to this process, send it to rank 0
+         * (line - from + 1) is used to calculate the correct local address */
         MPI_Send(Matrix[line - from + 1], elements, MPI_DOUBLE, 0, 42 + y, MPI_COMM_WORLD);
       }
     }
@@ -64,12 +61,12 @@ DisplayMatrix (struct calculation_arguments* arguments, struct calculation_resul
 
         if (line >= from && line <= to)
         {
-          // this line belongs to rank 0
+          /* this line belongs to rank 0 */
           printf("%7.4f", Matrix[line][col]);
         }
         else
         {
-          // this line belongs to another rank and was received above
+          /* this line belongs to another rank and was received above */
           printf("%7.4f", Matrix[0][col]);
         }
       }
@@ -80,4 +77,3 @@ DisplayMatrix (struct calculation_arguments* arguments, struct calculation_resul
 
   fflush(stdout);
 }
-

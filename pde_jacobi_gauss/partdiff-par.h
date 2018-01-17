@@ -1,7 +1,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /**                                                                        **/
-/**  	      	   TU Muenchen - Institut fuer Informatik                    **/
+/**  	      	   TU Muenchen - Institut fuer Informatik                  **/
 /**                                                                        **/
 /** Copyright: Prof. Dr. Thomas Ludwig                                     **/
 /**            Thomas A. Zochler, Andreas C. Schmidt                       **/
@@ -24,7 +24,7 @@
 #define PI 			3.141592653589793
 #endif
 #define TWO_PI_SQUARE 		(2 * PI * PI)
-#define MAX_INTERLINES      10240
+#define MAX_INTERLINES      100000//10240
 #define MAX_ITERATION  		200000
 #define MAX_THREADS         1024
 #define METH_GAUSS_SEIDEL 	1
@@ -33,22 +33,6 @@
 #define FUNC_FPISIN		2
 #define TERM_PREC		1
 #define TERM_ITER		2
-
-struct calculation_arguments
-{
-  uint64_t  N;              /* number of spaces between lines (lines=N+1)     */
-  uint64_t  num_matrices;   /* number of matrices                             */
-  double    h;              /* length of a space between two lines            */
-  double    ***Matrix;      /* index matrix used for addressing M             */
-  double    *M;             /* two matrices with real values                  */
-};
-
-struct calculation_results
-{
-  uint64_t  m;
-  uint64_t  stat_iteration; /* number of current iteration                    */
-  double    stat_precision; /* actual precision of all slaves in iteration    */
-};
 
 struct options
 {
@@ -68,6 +52,4 @@ struct options
 /* - askparams.c               */
 /* - displaymatrix.c           */
 /* *************************** */
-void AskParams (struct options*, int, char**);
-void seq_Call(int argc,char** argv);
-void DisplayMatrix (/*struct calculation_arguments* arguments, struct calculation_results* results,*/ struct options* options, int rank, int size, int from, int to,double** Matrix_In);
+void AskParams (struct options*, int, char**, int rank);
